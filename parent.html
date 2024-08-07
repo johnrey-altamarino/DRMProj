@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Parent Page</title>
+    <script>
+        
+        function handleKeyPress(event) {
+            // Check if F12 key is pressed
+            if (event.key === 'F12') {
+                event.preventDefault(); // Prevent the default action
+                document.getElementById('iframe').srcdoc = '<h1>403 Forbidden</h1><p>Access Denied.</p>';
+            }
+        }
+
+        window.addEventListener('keydown', handleKeyPress, false);
+    </script>
+</head>
+<body>
+    <h1>Parent Page</h1>
+    <iframe id="iframe" src="iframe-content.html" style="width:100%; height:500px; border:none;"></iframe>
+</body>
+</html>

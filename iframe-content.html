@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Iframe Content</title>
+    <script>
+        function detectDebugger() {
+            // Function to detect if a debugger is present
+            const threshold = 160; // Adjust based on observation
+            const start = new Date();
+            debugger; // Intentionally pause execution
+            const end = new Date();
+            const isDebugger = end - start > threshold;
+
+            if (isDebugger) {
+                // Send a message to the parent page indicating debugger detection
+                window.parent.postMessage('debugger-detected', '*');
+            }
+        }
+
+        // Run the debugger check when the iframe loads
+        window.onload = detectDebugger;
+    </script>
+</head>
+<body>
+    <iframe width="1280" height="720" src="https://www.youtube.com/embed/ZFoNjXwwPho" title="ENTER SANDMAN" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</body>
+</html>

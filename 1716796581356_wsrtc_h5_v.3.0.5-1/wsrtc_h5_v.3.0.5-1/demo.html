@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <base target="_blank">
+
+  <title>Wangsu WebRTC Play Demo</title>
+  <link rel="stylesheet" href="css/rtc_main.css" />
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="icon" href="data:;base64,=">
+
+</head>
+
+<body>
+
+  <div id="container" align="center">
+
+    <h1>Wangsu WebRTC Play Demo</h1>
+    <video id="video2" controls autoplay muted playsinline></video>
+
+    <br/>
+    <div>
+        <br><input style="width:80%;" name="signal_url" id="signal_url" type="text" placeholder="signal url" value="http://livep2p-pull.8686c.com/live/cctest1.sdp"></>
+        <br/><br/>
+    </div>
+
+    <div>
+    <br>
+    </div>
+
+    <div>
+      <button id="play">Play</button>
+      <button id="stop">Stop</button>
+    </div>
+    <video id="video1" controls autoplay muted playsinline></video>
+    <div>
+      <br><input style="width:80%;" name="signal_url1" id="signal_url1" type="text" placeholder="signal url" value="http://livep2p-pull.8686c.com/live/cctest1.sdp"></>
+      <br/><br/>
+  </div>
+
+  <div>
+  <br>
+  </div>
+
+  <div>
+    <button id="play1">Play</button>
+    <button id="stop1">Stop</button>
+  </div>
+
+  </div>
+
+  <script src="wsrtcplayer.min.js"></script>
+
+  <script>
+    function onEvent(type, data) {
+      switch (type) {
+		case 3:
+		  console.log((window.performance.now() / 1000).toFixed(3) + ": customer event : " + data);
+		  break;
+        case 2:
+          console.log((window.performance.now() / 1000).toFixed(3) + ": customer event sdp: " + data.toString());
+          break;
+        case 1:
+          console.log((window.performance.now() / 1000).toFixed(3) + ": customer event caton");
+          break;
+        case 0:
+          console.log((window.performance.now() / 1000).toFixed(3) + ": customer event resume");
+          break;
+      }
+    }
+
+    var playBtn = document.getElementById('play');
+    var stopBtn = document.getElementById('stop');
+
+	var player;
+  
+    playBtn.onclick = function() {
+	 if (player) {
+		player.destory();
+	 }
+     var option = {};
+     option.element = document.getElementById('video2');
+     option.customerID = "bjweimiao";
+     option.listener = onEvent;
+	 player = window.wsrtcplayer.createWSRTCPlayer(option);
+
+      var signal_url = document.getElementById('signal_url').value;
+      if (signal_url === '') {
+        alert("need signal_url");
+        document.getElementById('signal_url').focus();
+      }
+      player.open(signal_url);
+    };
+    stopBtn.onclick = function() {
+      if (player)
+        player.close();
+    };
+
+    var play1Btn = document.getElementById('play1');
+    var stop1Btn = document.getElementById('stop1');
+
+    var player1;
+    play1Btn.onclick = function() {
+
+      if (player1) {
+        player1.destory();
+      }
+
+      var option1 = {};
+      option1.element = document.getElementById('video1');
+      option1.customerID = "bjweimiao";
+      option1.listener = onEvent;
+      player1 = window.wsrtcplayer.createWSRTCPlayer(option1);
+      var signal_url = document.getElementById('signal_url1').value;
+      if (signal_url === '') {
+        alert("need signal_url");
+        document.getElementById('signal_url1').focus();
+      }
+      player1.open(signal_url);
+    };
+    stop1Btn.onclick = function() {
+      if (player1)
+        player1.close();
+    };
+
+    var signal_url = document.getElementById('signal_url').value;
+    if (signal_url === '') {
+      alert("need signal_url");
+      document.getElementById('signal_url').focus();
+    }
+
+    // Anti-debugger code
+    (function() {
+      var devtools = false;
+
+      setInterval(function() {
+        devtools = false;
+        var before = new Date();
+        debugger;
+        if (new Date() - before > 100) {
+          devtools = true;
+        }
+        if (devtools) {
+          handleDevToolsOpen();
+        }
+      }, 500);
+
+      function handleDevToolsOpen() {
+        if (player) {
+          player.close();
+          player = null;
+        }
+        if (player1) {
+          player1.close();
+          player1 = null;
+        }
+        alert('Developer tools detected! Video playback has been stopped.');
+      }
+    })();
+
+  </script>
+</body>
+</html>
